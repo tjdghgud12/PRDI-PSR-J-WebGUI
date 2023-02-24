@@ -1,0 +1,1 @@
+tar -zcvf updates.tgz --exclude api/package-lock.json --exclude node_modules --exclude update --exclude api/db --exclude api/yarn-error.log --exclude commandUpdateFilebuild.sh --exclude updates.tgz ./

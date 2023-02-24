@@ -1,0 +1,899 @@
+LOADABLE-SNMP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS 
+    MODULE-IDENTITY,
+	OBJECT-TYPE, 
+	NOTIFICATION-TYPE,
+	Integer32,
+	IpAddress,
+	Gauge32	
+		FROM SNMPv2-SMI
+	DisplayString
+		FROM SNMPv2-TC
+	MODULE-COMPLIANCE,
+	OBJECT-GROUP,
+	NOTIFICATION-GROUP
+		FROM SNMPv2-CONF
+		;
+
+rSNMPObjects MODULE-IDENTITY
+    LAST-UPDATED  "202211171832Z"
+    ORGANIZATION  "Paradigm, INC."
+    CONTACT-INFO
+        "https://paradigm-lab.com/"
+    DESCRIPTION
+        "This is the MIB module for managing Public Safety Repeater Systems."
+
+    -- Revision History
+    REVISION    "202209151832"
+    DESCRIPTION "This is the MIB module for managing Public Safety Repeater Systems."
+    
+    ::= { enterprises 19865 }
+    
+
+
+rSystem             OBJECT IDENTIFIER ::= { rSNMPObjects 1 }  -- 1  System
+rRFAnalysis         OBJECT IDENTIFIER ::= { rSNMPObjects 2 }  -- 2  RF Analysis
+rTrapState          OBJECT IDENTIFIER ::= { rSNMPObjects 3 }  -- 3  Trap State
+rNotification       OBJECT IDENTIFIER ::= { rSNMPObjects 4 }  -- 4  Trap
+-- rNotificationinfo   OBJECT IDENTIFIER ::= { rSNMPObjects 5 }  >> 5  Notification infomation
+rChannelFilter      OBJECT IDENTIFIER ::= { rSNMPObjects 5 }  -- 5  Channel Filter
+rIsolation          OBJECT IDENTIFIER ::= { rSNMPObjects 6 }  -- 6  Isolation
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------
+-- rSNMPObjects :: rSystem
+-- ------------------------------------------------------
+repeaterType OBJECT-TYPE 
+
+    SYNTAX      DisplayString (SIZE (1..25))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Repeater Type PSR-SNMP"
+    DEFVAL { "PSR-SNMP" }
+   
+    ::= { rSystem 1 }
+
+
+firmwareVersion OBJECT-TYPE
+    
+    SYNTAX      DisplayString 
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Firmware Version Ex) 1.0.01"
+    DEFVAL { "0.0.00" }
+    ::= { rSystem 2 }
+    
+productNumber OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (1..25))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Product Number Ex) 123456789abc"
+    DEFVAL { "123456789abc" }
+
+    ::= { rSystem 3 }
+    
+serialNumber OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (1..25))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Serial Number Ex) 123456789abc"
+  
+    DEFVAL { "123456789abc" }
+    ::= { rSystem 4 }
+    
+siteID OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (1..25))
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Site ID Ex) 123456789abc"
+  
+    DEFVAL { "123456789abc" }
+    ::= { rSystem 5 }
+
+temperature OBJECT-TYPE
+    SYNTAX      Integer32 (-128..127)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Temperature Ex) 40 degree Celsius"
+ 
+    DEFVAL { 0 }
+    ::= { rSystem 6 }
+
+
+
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------
+-- rSNMPObjects :: rRFAnalysis
+-- ------------------------------------------------------
+dl700InputPower OBJECT-TYPE
+    SYNTAX      Integer32 (-1200..0)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Downlink(700MHz band) Input Power Value. (value/10[dBm])
+                 Downlink(700MHz band) input power range is -120.0~0[dBm]
+                "
+    DEFVAL { -1200 }
+    ::= { rRFAnalysis 1 }
+    
+dl800InputPower OBJECT-TYPE
+    SYNTAX      Integer32 (-1200..0)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) Input Power Value. (value/10[dBm])
+                 Downlink(800MHz band) input power range is -120.0~0[dBm]
+                "
+    DEFVAL { -1200 }
+    ::= { rRFAnalysis 2 }
+    
+ulInputPower OBJECT-TYPE
+    SYNTAX      Integer32 (-1200..0)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Uplink Input Power Value. (value/10[dBm])
+                 Uplink input power range is -120.0~0[dBm]
+                "
+    DEFVAL { -1200 }
+    ::= { rRFAnalysis 3 }
+
+dl700LowInputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (-127..128)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(700MHz band) Low Input Alarm setting value.
+    		 Range is -127-128[dBm]
+                "
+    DEFVAL { -127 }
+    ::= { rRFAnalysis 4 }
+    
+dl800LowInputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (-127..128)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) Low Input Alarm setting value.
+    		 Range is -127-128[dBm]
+                "
+    DEFVAL { -127 }
+    ::= { rRFAnalysis 5 }
+    
+dl700HighInputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (-127..128)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(700MHz band) High Input Alarm setting value.
+    		 Range is -127-128[dBm]
+                "
+    DEFVAL { -60 }
+    ::= { rRFAnalysis 6 }
+    
+dl800HighInputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (-127..128)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) High Input Alarm setting value.
+    		 Range is -127-128[dBm]
+                "
+    DEFVAL { -60 }
+    ::= { rRFAnalysis 7 }
+
+dl700ALCLevel OBJECT-TYPE
+    SYNTAX      Integer32 (0..270)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(700MHz band) ALC Level"
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 8 }
+    
+dl800ALCLevel OBJECT-TYPE
+    SYNTAX      Integer32 (0..270)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) ALC Level"
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 9 }
+    
+ulALCLevel OBJECT-TYPE
+    SYNTAX      Integer32 (0..270)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Uplink ALC Level"
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 10 }
+           
+ dl700ALCEnable	OBJECT-TYPE
+    SYNTAX      Integer32 (0..1)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION " 0 : ALC OFF
+                  1 : ALC ON
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 11 }
+    
+ dl800ALCEnable	OBJECT-TYPE
+    SYNTAX      Integer32 (0..1)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION " 0 : ALC OFF
+                  1 : ALC ON
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 12 }
+    
+ ulALCEnable	OBJECT-TYPE
+    SYNTAX      Integer32 (0..1)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION " 0 : ALC OFF
+                  1 : ALC ON
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 13 }
+ 
+ dl700UserAttenuator1 OBJECT-TYPE
+    SYNTAX      Integer32 (0..450)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) User Attenuation1 Value. value/20[dB], 0.5 step, Range : 0~22.5[dB]"
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 14 }
+ 
+ dl800UserAttenuator1 OBJECT-TYPE
+    SYNTAX      Integer32 (0..450)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) User Attenuation1 Value. value/20[dB], 0.5 step, Range : 0~22.5[dB]"
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 15 }
+    
+ulUserAttenuator1 OBJECT-TYPE
+    SYNTAX      Integer32 (0..450)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Uplink User Attenuation1 Value. value/20[dB], 0.5 step, Range : 0~22.5[dB]"
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 16 }
+    
+dl700OutputPower OBJECT-TYPE
+    SYNTAX      Integer32 (0..300)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Downlink(700MHz band) Output Power Value. (value/10[dBm])
+                 Downlink(700MHz band) Output power range is 0~30.0[dBm]
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 17 }
+    
+dl800OutputPower OBJECT-TYPE
+    SYNTAX      Integer32 (0..300)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) Output Power Value. (value/10[dBm])
+                 Downlink(800MHz band) Output power range is 0~30.0[dBm]
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 18 }
+    
+ulOutputPower OBJECT-TYPE
+    SYNTAX      Integer32 (0..300)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Uplink Output Power Value. (value/10[dBm])
+                 Uplink Output power range is 0~30.0[dBm]
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 19 }
+    
+dl700HighOutputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (0..30)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(700MHz band) High Output Alarm setting value.
+    		 Range is 0-30[dBm]
+                "
+    DEFVAL { 30 }
+    ::= { rRFAnalysis 20 }
+    
+dl800HighOutputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (0..30)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) High Output Alarm setting value.
+    		 Range is 0-30[dBm]
+                "
+    DEFVAL { 30 }
+    ::= { rRFAnalysis 21 }
+    
+ulHighOutputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (0..30)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Uplink High Output Alarm setting value.
+    		 Range is 0-30[dBm]
+                "
+    DEFVAL { 30 }
+    ::= { rRFAnalysis 22 }
+    
+dl700LowOutputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (-127..128)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(700MHz band) Low Output Alarm setting value.
+    		 Range is -127-128[dBm]
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 23 }
+    
+dl800LowOutputThreshold OBJECT-TYPE
+    SYNTAX      Integer32 (-127..128)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "Downlink(800MHz band) Low Output Alarm setting value.
+    		 Range is -127-128[dBm]
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 24 }
+    
+dl700PAUEnable	OBJECT-TYPE
+    SYNTAX      Integer32 (0..1)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION " 0 : PAU OFF
+                  1 : PAU ON
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 25 }
+    
+ dl800PAUEnable	OBJECT-TYPE
+    SYNTAX      Integer32 (0..1)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION " 0 : PAU OFF
+                  1 : PAU ON
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 26 }
+    
+ ulPAUEnable	OBJECT-TYPE
+    SYNTAX      Integer32 (0..1)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION " 0 : PAU OFF
+                  1 : PAU ON
+                "
+    DEFVAL { 0 }
+    ::= { rRFAnalysis 27 }   
+    
+filterSelection OBJECT-TYPE
+    SYNTAX      Integer32 (1..2)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION "   1 : Class A
+                    2 : Class B
+                "
+    DEFVAL { 1 }
+    ::= { rRFAnalysis 28 }    
+
+
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------
+-- rSNMPObjects :: rTrapState
+-- ------------------------------------------------------
+acpowerAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for ac power Fail."
+    DEFVAL { normalState }
+    ::= { rTrapState 1 }
+    
+tempAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Temperature."
+    DEFVAL { normalState }
+    ::= { rTrapState 2 }
+    
+dcFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for DC Fail."
+    DEFVAL { normalState }
+    ::= { rTrapState 3 }
+    
+batteryCapacityAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Battery Capacity."
+    DEFVAL { normalState }
+    ::= { rTrapState 4 }
+
+dcdcFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for DC/DC Fail."
+    DEFVAL { normalState }
+    ::= { rTrapState 5 }
+
+pllAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for PLL alarm."
+    DEFVAL { normalState }
+    ::= { rTrapState 6 }
+
+dl700PAUFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(700MHz band) PAU FAIL."
+    DEFVAL { normalState }
+    ::= { rTrapState 7 }
+    
+dl800PAUFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(800MHz band) PAU FAIL."
+    DEFVAL { normalState }
+    ::= { rTrapState 8 }
+    
+ulPAUFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Uplink PAU FAIL."
+    DEFVAL { normalState }
+    ::= { rTrapState 9 }
+    
+dl700ANTFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(700MHz band) ANT FAIL."
+    DEFVAL { normalState }
+    ::= { rTrapState 10 }
+    
+dl800ANTFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(800MHz band) ANT FAIL."
+    DEFVAL { normalState }
+    ::= { rTrapState 11 }
+    
+ulANTFailAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Uplink ANT FAIL."
+    DEFVAL { normalState }
+    ::= { rTrapState 12 }
+    
+dl700HighInputAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(700MHz band) High Input."
+    DEFVAL { normalState }
+    ::= { rTrapState 13 }
+    
+dl800HighInputAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(800MHz band) High Input."
+    DEFVAL { normalState }
+    ::= { rTrapState 14 }
+        
+dl700HighOutputAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(700MHz band) High Output Alarm."
+    DEFVAL { normalState }
+    ::= { rTrapState 15 }
+    
+dl800HighOutputAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Downlink(800MHz band) High Output Alarm."
+    DEFVAL { normalState }
+    ::= { rTrapState 16 }    
+    
+ulHighOutputtAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Uplink High Output Alarm."
+    DEFVAL { normalState }
+    ::= { rTrapState 17 }    
+    
+testAlarmState OBJECT-TYPE
+    SYNTAX INTEGER {
+        normalState(0),
+        alarmState(1)
+    }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Alarm status for Test Alarm."
+    DEFVAL { normalState }
+    ::= { rTrapState 999 }    
+
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------
+-- rSNMPObjects :: rNotification
+-- ------------------------------------------------------
+acpowerAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  acpowerAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for ac power Fail."
+    ::= { rNotification 1 }
+   
+tempAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  tempAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Temperature Alarm."
+    ::= { rNotification 2 }
+    
+dcFailAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  dcFailAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for DC Fail."
+    ::= { rNotification 3 }
+
+batteryCapacityAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  batteryCapacityAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Battery Capacity Alarm."
+    ::= { rNotification 4 }
+
+dcdcFailAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  dcdcFailAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for DC/DC Fail Alarm."
+    ::= { rNotification 5 }
+    
+dl700PllAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  dl700PllAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for DL700 PLL Alarm."
+    ::= { rNotification 6 }   
+
+dl800PllAlarm NOTIFICATION-TYPE
+    OBJECTS     {siteID,
+                  dl800PllAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for DL800 PLL Alarm."
+    ::= { rNotification 7 }   
+    
+ulPllAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  ulPllAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for UL PLL Alarm."
+    ::= { rNotification 8 }
+    
+dl700ANTFailAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  dl700ANTFailAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Downlink(700MHz band) ANT FAIL."
+    ::= { rNotification 9 }  
+    
+dl800ANTFailAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  dl800ANTFailAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Downlink(800MHz band) ANT FAIL."
+    ::= { rNotification 10 }   
+    
+ulANTFailAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  ulANTFailAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Uplink ANT FAIL."
+    ::= { rNotification 11 }  
+    
+dl700HighOutputAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  dl700HighOutputAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Downlink(700MHz band) High Output Alarm."
+    ::= { rNotification 12 }   
+
+dl800HighOutputAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  dl800HighOutputAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Downlink(800MHz band) High Output Alarm."
+    ::= { rNotification 13 }  
+    
+ulHighOutputtAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  ulHighOutputtAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Uplink High Output Alarm."
+    ::= { rNotification 14 }    
+
+testAlarm NOTIFICATION-TYPE
+    OBJECTS     { siteID,
+                  testAlarmState
+                }
+    STATUS      current
+    DESCRIPTION "Notification for Test Alarm."
+    ::= { rNotification 999 }    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------
+-- rSNMPObjects :: rNotificationinfo
+-- ------------------------------------------------------
+--nNotificationString OBJECT-TYPE
+--    SYNTAX      DisplayString (SIZE (1..25))
+--    MAX-ACCESS  read-only
+--    STATUS      current
+--    DESCRIPTION "Site ID"
+--  
+--    DEFVAL { "" }
+--    ::= { rNotificationinfo 1 }
+--
+--nNotificationStatus OBJECT-TYPE
+--    SYNTAX      Integer32 (0..1)
+--    MAX-ACCESS  read-only
+--    STATUS      current
+--    DESCRIPTION "0: Clear
+--                 1: Set"
+-- 
+--    DEFVAL { 0 }
+--    ::= { rNotificationinfo 2 }
+    
+    
+	
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------
+-- rSNMPObjects :: rChannelFilter
+-- ------------------------------------------------------
+filterControlPath   OBJECT-TYPE
+    SYNTAX         Integer32 ( 1..2 )
+    MAX-ACCESS     read-write
+    STATUS         current
+    DESCRIPTION
+        "1: Downlink
+        2: Uplink
+        "
+    DEFVAL { 1 }
+    ::= { rChannelFilter 1 }
+
+
+filterControlChannelIndex   OBJECT-TYPE
+    SYNTAX         Integer32 ( 1..64 )
+    MAX-ACCESS     read-write
+    STATUS         current
+    DESCRIPTION
+        "Channel Index
+        Ex) CH7: 7
+        "
+    DEFVAL { 1 }
+    ::= { rChannelFilter 2 }
+    
+filterControlChannelInputPower   OBJECT-TYPE
+    SYNTAX         Integer32 (-1200..0)
+    MAX-ACCESS     read-only	
+    STATUS         current
+    DESCRIPTION
+        "Channel Input Power value. (value/10[dBm])"
+    DEFVAL { 0 }
+    ::= { rChannelFilter 3 }
+		
+                 
+filterControlChannelAttenuator   OBJECT-TYPE
+    SYNTAX         Integer32 ( 0..60 )
+    MAX-ACCESS     read-write	
+    STATUS         current
+    DESCRIPTION
+        "Channel Attenuator value. (value/2[dB])"
+    DEFVAL { 0 }
+    ::= { rChannelFilter 4 }
+		
+filterControlChannelOutputPower   OBJECT-TYPE
+    SYNTAX         Integer32 ( 0..380 )
+    MAX-ACCESS     read-only	
+    STATUS         current
+    DESCRIPTION
+        "Channel Output Power value. (value/10[dBm])"
+    DEFVAL { 0 }
+    ::= { rChannelFilter 5 }
+		
+filterControlChannelFreqInfo   OBJECT-TYPE
+    SYNTAX         Gauge32 ( 769000000..861000000 )
+    MAX-ACCESS     read-write	
+    STATUS         current
+    DESCRIPTION
+        "Channel Frequency value. (value/1000000[MHz])
+        Ex) 770000025 = 770.0000025 MHz"
+    DEFVAL { 769000000 }
+    ::= { rChannelFilter 6 }
+		
+filterControlChannelBandwidth   OBJECT-TYPE
+    SYNTAX         Gauge32 ( 0..18000000 )
+    MAX-ACCESS     read-write	
+    STATUS         current
+    DESCRIPTION
+        "Channel Bandwidth	
+        (0)OFF, (1)6.25KHz, (2)12.5KHz, (3)25KHz,
+        (4)50KHz, (5)100KHz, (6)200KHz"
+    DEFVAL { 0 }
+    ::= { rChannelFilter 7 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ------------------------------------------------------
+-- rSNMPObjects :: rIsolation
+-- ------------------------------------------------------
+dl700IsolationValue OBJECT-TYPE
+    SYNTAX      Integer32 (0..120)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Downlink 700 Isolation Value [dB]"
+    DEFVAL { 0 }
+    ::= { rIsolation 1 }
+
+dl800IsolationValue OBJECT-TYPE
+    SYNTAX      Integer32 (0..120)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Downlink 800 Isolation Value [dB]"
+    DEFVAL { 0 }
+    ::= { rIsolation 2 }
+
+ulIsolationValue OBJECT-TYPE
+    SYNTAX      Integer32 (0..120)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION "Uplink Isolation Value [dB]"
+    DEFVAL { 0 }
+    ::= { rIsolation 3 }
+
+END
+
